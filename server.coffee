@@ -1,5 +1,3 @@
-http = require("http")
-request = require("request")
 Browser = require("zombie")
 Cheerio = require("cheerio")
 Mail = require("./Mail")
@@ -13,6 +11,9 @@ checkSlot = (account) ->
 	browser = new Browser()
 
 	availableDate = []
+
+	if account.website.email == "" or account.website.password == ""
+		throw "[ERROR] Website informations missing"
 
 	browser.visit host + path, {runScripts: false}, ->
 
@@ -33,7 +34,7 @@ checkSlot = (account) ->
 					date = [];
 					preRentre = $("table tbody tr").find('td')[i].children[0].data.replace(/(\r\n|\n|\r)/gm,"");
 					rentre = $("table tbody tr").find('td')[i + 1].children[0].data.replace(/(\r\n|\n|\r)/gm,"");
-					isAvailable = $("table tbody tr").find('td')[i + 2].children[0].data.replace(/(\r\n|\n|\r)/gm,"")
+					isAvailable = if $("table tbody tr").find('td')[i + 2].children[0].data.replace(/(\r\n|\n|\r)/gm,"") == "Plus de place" then false else true
 					date['preRentre'] = preRentre
 					date['rentre'] = rentre
 					date['isAvailable'] = isAvailable
@@ -59,5 +60,9 @@ account =
 		email: ""
 		password: ""
 
-setInterval(checkSlot(account), (1000 * 60) * 30)
+try
+	setInterval(checkSlot(account), (1000 * 60) * 30)
+catch e
+	console.log e
+
 

@@ -3,7 +3,8 @@ nodemailer = require("nodemailer")
 class Mail
 	account: {}
 	constructor: (@account)->
-
+		if (account.auth.user == "" or account.auth.password == "")
+			throw "[ERROR] Mail informations missing"
 
 	send: (callback) ->
 		mailOptions =
