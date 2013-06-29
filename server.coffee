@@ -34,7 +34,6 @@ checkSlot = (account) ->
 					preRentre = $("table tbody tr").find('td')[i].children[0].data.replace(/(\r\n|\n|\r)/gm,"");
 					rentre = $("table tbody tr").find('td')[i + 1].children[0].data.replace(/(\r\n|\n|\r)/gm,"");
 					isAvailable = $("table tbody tr").find('td')[i + 2].children[0].data.replace(/(\r\n|\n|\r)/gm,"")
-					#++i if "Plus de place" == isAvailable
 					date['preRentre'] = preRentre
 					date['rentre'] = rentre
 					date['isAvailable'] = isAvailable
@@ -42,12 +41,11 @@ checkSlot = (account) ->
 					i += 4
 				if availableDate[0]['isAvailable'] == true
 					console.log " -- [#{time}] You can register for an early pool =D"
+					mail = new Mail(account.email)
+					mail.send()
 					
 				else
 					console.log " -- [#{time}] No slot available for early pool :("
-
-				mail = new Mail(account.email)
-				mail.send()
 		), 2000
 
 
